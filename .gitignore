@@ -13,3 +13,6 @@ tests/scratch/
 .claude/
 .cursor/
 .codex/
+
+# Go port: the full recordings; go/testdata/golden holds the committed selection
+go/testdata/recorded/

@@ -40,6 +40,22 @@ jobs:
           touch "$RUNNER_TEMP/pele-library-tests/passed"
       - run: npm run build
 
+  go:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: go
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go/go.mod
+          cache-dependency-path: go/go.mod
+      - run: test -z "$(gofmt -l .)"
+      - run: go vet ./...
+      - run: go test ./...
+
   website:
     needs: check
     runs-on: ubuntu-latest
