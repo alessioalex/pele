@@ -455,3 +455,29 @@ func Cmp(d float64) int {
 	}
 	return 0
 }
+
+// ToExponential is Number.prototype.toExponential with a digit count: of the two nearest, the larger.
+func ToExponential(x float64, f int) string {
+	if math.IsNaN(x) || math.IsInf(x, 0) {
+		return NumberToString(x)
+	}
+	sign := ""
+	if x < 0 {
+		sign = "-"
+		x = -x
+	}
+	m, e := strings.Repeat("0", f+1), 0
+	if x != 0 {
+		digits, point := exactDigits(x)
+		m, point = roundDigits(digits, point, f+1)
+		e = point - 1
+	}
+	out := m[:1]
+	if f > 0 {
+		out += "." + m[1:]
+	}
+	if e < 0 {
+		return sign + out + "e-" + strconv.Itoa(-e)
+	}
+	return sign + out + "e+" + strconv.Itoa(e)
+}
