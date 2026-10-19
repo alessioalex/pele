@@ -75,7 +75,8 @@ function __write(text: string, options: Record<string, unknown>, run: () => Rend
 // Runs a render the way the caller asked for it, and records it when it can be replayed.
 function __record(text: string, options: RenderOptions): void {
   if (!__dir || typeof text !== 'string') return;
-  const seen: Record<string, string | null> = {};
+  // Without a prototype, so that an icon named __proto__ is kept.
+  const seen: Record<string, string | null> = Object.create(null);
   const given = options.icons;
   const opts: RenderOptions = { ...options };
   if (given) opts.icons = (name: string) => {
