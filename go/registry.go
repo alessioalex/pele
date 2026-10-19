@@ -7,6 +7,7 @@ import (
 	"github.com/alessioalex/pele/go/internal/diagrams/git"
 	"github.com/alessioalex/pele/go/internal/diagrams/info"
 	"github.com/alessioalex/pele/go/internal/diagrams/ishikawa"
+	"github.com/alessioalex/pele/go/internal/diagrams/journey"
 	"github.com/alessioalex/pele/go/internal/diagrams/kanban"
 	"github.com/alessioalex/pele/go/internal/diagrams/mindmap"
 	"github.com/alessioalex/pele/go/internal/diagrams/packet"
@@ -29,6 +30,7 @@ var all = []*core.Diagram{
 	git.Diagram,
 	info.Diagram,
 	ishikawa.Diagram,
+	journey.Diagram,
 	kanban.Diagram,
 	mindmap.Diagram,
 	packet.Diagram,
