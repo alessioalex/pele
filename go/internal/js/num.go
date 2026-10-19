@@ -71,7 +71,7 @@ func Hypot(values ...float64) float64 {
 	sum, comp := 0.0, 0.0
 	for _, a := range abs {
 		n := a / maxv
-		summand := float64(n*n) - comp
+		summand := float64(n*n) - comp // float64() prevents FMA fusion on arm64 etc.
 		pre := sum + summand
 		comp = (pre - sum) - summand
 		sum = pre

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"math"
 	"os"
+	"strconv"
 	"strings"
 	"testing"
 )
@@ -14,7 +15,6 @@ type fixture struct {
 	Prec    [][]any `json:"prec"`
 	Round   [][]any `json:"round"`
 	Strings [][]any `json:"strings"`
-	Math    [][]any `json:"math"`
 }
 
 func f64(v any) float64 {
@@ -94,25 +94,64 @@ func TestNumbers(t *testing.T) {
 	}
 }
 
+// TestMath checks testdata/math.json: {"<fn> <fn>...": ["<inputs> <result per fn>", ...]},
+// every number written as its float64 bits in hex.
 func TestMath(t *testing.T) {
-	f := load(t)
-	names := []string{"sin", "cos", "atan2", "acos", "asin", "pow", "log10", "log2", "hypot", "sqrt"}
-	bad := map[string]int{}
-	for _, c := range f.Math {
-		x := f64(c[0])
-		clamp := math.Max(-1, math.Min(1, x))
-		got := []float64{Sin(x), Cos(x), Atan2(x, 0.7), Acos(clamp), Asin(clamp), Pow(math.Abs(x), 0.37), Log10(math.Abs(x)), Log2(math.Abs(x)), Hypot(x, 3.1), math.Sqrt(math.Abs(x))}
-		for i, g := range got {
-			if !same(g, f64(c[i+1])) {
-				bad[names[i]]++
+	data, err := os.ReadFile("testdata/math.json")
+	if err != nil {
+		t.Skip("no math fixture")
+	}
+	var tables map[string][]string
+	if err := json.Unmarshal(data, &tables); err != nil {
+		t.Fatal(err)
+	}
+	unary := map[string]func(float64) float64{
+		"sin": Sin, "cos": Cos, "tan": Tan, "asin": Asin, "acos": Acos, "atan": Atan,
+		"exp": Exp, "expm1": Expm1, "sinh": Sinh, "cosh": Cosh, "tanh": Tanh,
+		"log": Log, "log2": Log2, "log10": Log10, "log1p": Log1p, "cbrt": Cbrt, "sqrt": math.Sqrt,
+	}
+	binary := map[string]func(float64, float64) float64{
+		"atan2": Atan2, "pow": Pow, "hypot": func(x, y float64) float64 { return Hypot(x, y) },
+	}
+	for key, rows := range tables {
+		names := strings.Fields(key)
+		arity := 1
+		if binary[names[0]] != nil {
+			arity = 2
+		}
+		bad := make([]int, len(names))
+		for _, row := range rows {
+			fields := strings.Fields(row)
+			if len(fields) != arity+len(names) {
+				t.Fatalf("%s: bad row %q", key, row)
+			}
+			v := make([]float64, len(fields))
+			for i, f := range fields {
+				b, err := strconv.ParseUint(f, 16, 64)
+				if err != nil {
+					t.Fatalf("%s: bad row %q", key, row)
+				}
+				v[i] = math.Float64frombits(b)
+			}
+			for i, name := range names {
+				var got float64
+				if arity == 1 {
+					got = unary[name](v[0])
+				} else {
+					got = binary[name](v[0], v[1])
+				}
+				if want := v[arity+i]; !same(got, want) {
+					if bad[i] < 3 {
+						t.Errorf("%s(%s) = %016x, want %016x", name, strings.Join(fields[:arity], ", "), math.Float64bits(got), math.Float64bits(want))
+					}
+					bad[i]++
+				}
 			}
 		}
-	}
-	if len(bad) > 0 {
-		var parts []string
-		for k, v := range bad {
-			parts = append(parts, k+":"+NumberToString(float64(v)))
+		for i, n := range bad {
+			if n > 0 {
+				t.Errorf("%s differs from V8 on %d of %d inputs", names[i], n, len(rows))
+			}
 		}
-		t.Errorf("math functions differ from V8 on %d of %d inputs: %s", len(bad), len(f.Math), strings.Join(parts, " "))
 	}
 }

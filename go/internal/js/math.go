@@ -7,7 +7,8 @@ import "math"
 // return the same bits as V8 rather than Go's slightly different results.
 //
 // Products that feed an addition or subtraction are wrapped in float64() so that no
-// architecture fuses them into an FMA: V8's x64 build rounds every product.
+// architecture fuses them into an FMA: V8's x64 build rounds every product. Constants are
+// typed float64 so that constant expressions also round after each operation, as in C.
 
 func hiWord(x float64) int32  { return int32(math.Float64bits(x) >> 32) }
 func loWord(x float64) uint32 { return uint32(math.Float64bits(x)) }
