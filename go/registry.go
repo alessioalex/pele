@@ -20,6 +20,7 @@ import (
 	"github.com/alessioalex/pele/go/internal/diagrams/treemap"
 	"github.com/alessioalex/pele/go/internal/diagrams/treeview"
 	"github.com/alessioalex/pele/go/internal/diagrams/venn"
+	"github.com/alessioalex/pele/go/internal/diagrams/wardley"
 	"github.com/alessioalex/pele/go/internal/diagrams/xychart"
 )
 
@@ -43,5 +44,6 @@ var all = []*core.Diagram{
 	treemap.Diagram,
 	treeview.Diagram,
 	venn.Diagram,
+	wardley.Diagram,
 	xychart.Diagram,
 }
