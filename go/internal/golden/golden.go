@@ -12,6 +12,7 @@ import (
 	"math"
 	"os"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"strconv"
 	"strings"
@@ -23,6 +24,8 @@ import (
 
 // Record is one recorded call.
 type Record struct {
+	// Lone is set when the record holds a lone UTF-16 surrogate, which a Go string cannot hold.
+	Lone    bool                       `json:"-"`
 	Text    string                     `json:"text"`
 	Options map[string]json.RawMessage `json:"options"`
 	Result  *struct {
@@ -103,12 +106,16 @@ func Load(typ string) ([]Record, string, error) {
 			if err := json.Unmarshal(line, &rec); err != nil {
 				return nil, path, err
 			}
+			// JSON.stringify escapes only lone surrogates; a pair is written as its character.
+			rec.Lone = reLone.Match(line)
 			out = append(out, rec)
 		}
 		return out, path, sc.Err()
 	}
 	return nil, "", fmt.Errorf("no records for %s", typ)
 }
+
+var reLone = regexp.MustCompile(`\\ud[89a-f][0-9a-f]{2}`)
 
 func number(raw json.RawMessage) (float64, bool) {
 	var f float64
@@ -256,6 +263,9 @@ const (
 
 // Check renders one record and compares it with what was recorded.
 func Check(reg engine.Registry, rec *Record) (Outcome, string) {
+	if rec.Lone {
+		return Skip, "lone surrogate"
+	}
 	if rec.Error != nil && rec.Error.Message == "Diagram is nested too deeply." {
 		// The TypeScript library runs out of stack where Go does not.
 		return Skip, "nested too deeply"

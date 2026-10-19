@@ -7,6 +7,8 @@ import (
 	"github.com/alessioalex/pele/go/internal/diagrams/git"
 	"github.com/alessioalex/pele/go/internal/diagrams/info"
 	"github.com/alessioalex/pele/go/internal/diagrams/ishikawa"
+	"github.com/alessioalex/pele/go/internal/diagrams/kanban"
+	"github.com/alessioalex/pele/go/internal/diagrams/mindmap"
 	"github.com/alessioalex/pele/go/internal/diagrams/packet"
 	"github.com/alessioalex/pele/go/internal/diagrams/pie"
 	"github.com/alessioalex/pele/go/internal/diagrams/quadrant"
@@ -14,6 +16,7 @@ import (
 	"github.com/alessioalex/pele/go/internal/diagrams/railroad"
 	"github.com/alessioalex/pele/go/internal/diagrams/sankey"
 	"github.com/alessioalex/pele/go/internal/diagrams/timeline"
+	"github.com/alessioalex/pele/go/internal/diagrams/treeview"
 	"github.com/alessioalex/pele/go/internal/diagrams/venn"
 	"github.com/alessioalex/pele/go/internal/diagrams/xychart"
 )
@@ -25,6 +28,8 @@ var all = []*core.Diagram{
 	git.Diagram,
 	info.Diagram,
 	ishikawa.Diagram,
+	kanban.Diagram,
+	mindmap.Diagram,
 	packet.Diagram,
 	pie.Diagram,
 	quadrant.Diagram,
@@ -32,6 +37,7 @@ var all = []*core.Diagram{
 	railroad.Diagram,
 	sankey.Diagram,
 	timeline.Diagram,
+	treeview.Diagram,
 	venn.Diagram,
 	xychart.Diagram,
 }

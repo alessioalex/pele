@@ -30,7 +30,7 @@ Without the full recordings, tests use the committed selection in `go/testdata/g
 
 | Type (`dir`) | State |
 | --- | --- |
-| info | Passes, registered |
+| info | Passes |
 | pie | Passes |
 | packet | Passes |
 | radar | Passes |
@@ -44,9 +44,9 @@ Without the full recordings, tests use the committed selection in `go/testdata/g
 | eventmodeling | Passes |
 | railroad | Passes |
 | sankey | Passes (2 records skipped: "nested too deeply" in V8) |
-| kanban | KANBAN_STATE |
-| mindmap | MINDMAP_STATE |
-| treeView (`treeview`) | TREEVIEW_STATE |
+| kanban | Passes |
+| mindmap | Passes |
+| treeView (`treeview`) | Passes |
 | treemap | Not started |
 | journey | Not started |
 | gantt | In progress: JS `Date` emulation (`jsdate.go`) and date parsing (`dateparse.go`) written and checked by `scratch_dates_test.go`; lexer, parser, db, axis, render to do. |
@@ -66,8 +66,8 @@ Without the full recordings, tests use the committed selection in `go/testdata/g
 
 ## Next steps, in order
 
-1. For each type marked "Passes", add it to `registry.go` and run `go test .` (the public package replays
-   every registered type).
+1. Every type marked "Passes" is registered in `registry.go`; register each new one as it passes and run
+   `go test .` (the public package replays every registered type).
 2. Finish `internal/layout` (layered → compound → lanes), with a fixture test made by a TS driver
    (see PORTING.md, "Testing").
 3. Finish the in-progress types, smallest first: treemap, journey, wardley, architecture, gantt, sequence,
@@ -77,6 +77,8 @@ Without the full recordings, tests use the committed selection in `go/testdata/g
 
 ## Known issues
 
+- Records with a lone UTF-16 surrogate in them are skipped: a Go string cannot hold one, so the input
+  cannot be replayed as the TypeScript saw it.
 - Records whose TypeScript result is "Diagram is nested too deeply." are skipped: Go does not run out of
   stack where V8 does, so the Go port draws those diagrams.
 - `scripts/record-golden.mjs` must be rerun when `src/` changes, and `scripts/select-golden.mjs` after it,
