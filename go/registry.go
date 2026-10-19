@@ -2,6 +2,7 @@ package pele
 
 import (
 	"github.com/alessioalex/pele/go/internal/core"
+	"github.com/alessioalex/pele/go/internal/diagrams/architecture"
 	"github.com/alessioalex/pele/go/internal/diagrams/cynefin"
 	"github.com/alessioalex/pele/go/internal/diagrams/eventmodeling"
 	"github.com/alessioalex/pele/go/internal/diagrams/git"
@@ -26,6 +27,7 @@ import (
 
 // The diagram types ported so far. See TODO.md for the rest.
 var all = []*core.Diagram{
+	architecture.Diagram,
 	cynefin.Diagram,
 	eventmodeling.Diagram,
 	git.Diagram,

@@ -1,5 +1,3 @@
-//go:build wip
-
 // Package architecture draws Mermaid's architecture diagram.
 package architecture
 

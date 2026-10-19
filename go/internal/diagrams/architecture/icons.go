@@ -1,5 +1,3 @@
-//go:build wip
-
 package architecture
 
 // Outlines for the icon names Mermaid's architecture diagrams know without an icon pack, drawn on

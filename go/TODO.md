@@ -51,7 +51,7 @@ Without the full recordings, tests use the committed selection in `go/testdata/g
 | journey | Passes |
 | gantt | In progress: JS `Date` emulation (`jsdate.go`) and date parsing (`dateparse.go`) written and checked by `scratch_dates_test.go`; lexer, parser, db, axis, render to do. |
 | wardley | Passes |
-| architecture | In progress: parser, db, layout, icons; renderer missing. Files carry `//go:build wip` until it compiles. |
+| architecture | Passes |
 | sequence | In progress: lexer, parser, db; renderer missing. Files carry `//go:build wip`. |
 | block | In progress: lexer, parser, db, layout, render written; no golden test yet. |
 | c4 | In progress: lexer, parser, db, layout, route; renderer missing. |
@@ -70,7 +70,7 @@ Without the full recordings, tests use the committed selection in `go/testdata/g
    `go test .` (the public package replays every registered type).
 2. Finish `internal/layout` (layered → compound → lanes), with a fixture test made by a TS driver
    (see PORTING.md, "Testing").
-3. Finish the in-progress types, smallest first: architecture, gantt, sequence,
+3. Finish the in-progress types, smallest first: gantt, sequence,
    block, c4; then the layout users: flowchart, swimlane, state, er, requirement, class, usecase, agentflow.
 4. When every type passes: run the full suite against the full recordings, fuzz each type
    (`scripts/record-inputs.mjs`), remove `//go:build wip` tags and scratch tests, and update README.md.

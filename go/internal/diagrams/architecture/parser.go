@@ -1,5 +1,3 @@
-//go:build wip
-
 package architecture
 
 import (
