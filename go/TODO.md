@@ -49,7 +49,7 @@ Without the full recordings, tests use the committed selection in `go/testdata/g
 | treeView (`treeview`) | Passes |
 | treemap | Passes |
 | journey | Passes |
-| gantt | In progress: JS `Date` emulation (`jsdate.go`) and date parsing (`dateparse.go`) written and checked by `scratch_dates_test.go`; lexer, parser, db, axis, render to do. |
+| gantt | In progress: JS `Date` emulation (`jsdate.go`), date parsing (`dateparse.go`, checked by `scratch_dates_test.go`) and the lexer (`lexer.go`, `tokens.go`; matched the TS lexer token for token on all 4,815 recorded inputs) are done. Parser, db, axis and render to do. |
 | wardley | Passes |
 | architecture | Passes |
 | sequence | In progress: lexer, parser, db; renderer missing. Files carry `//go:build wip`. |
